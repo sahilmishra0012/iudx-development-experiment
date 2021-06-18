@@ -1,5 +1,5 @@
 import pika
-import sys
+import datetime
 import time
 import numpy as np
 import random
@@ -36,16 +36,21 @@ def main():
 
 	for i in range(iterations):    
 		data = {}
-		data['key'] = i
+		data['key'] = i # Add offset to the key so that it doesn't overwrite the existing data
+		data['date'] = str(datetime.datetime.now())
 		data['signal'] = float(round(sine_signal[i], 4))
-		data['deviceId'] = generate_cat()
+		# data['deviceId'] = generate_cat()
 		message = json.dumps(data)
 
 		channel.basic_publish(exchange=exchange_name, routing_key=routing_key, body=message)
 		print(f" [x] Sent[{i}]: {message} \t {exchange_name} -> {queue_name}")
+		time.sleep(delay)
+	connection.close()
+
 
 
 
 if __name__ == "__main__":
-	iterations = 10
+	iterations = 20000000
+	delay = 0.1
 	main()
