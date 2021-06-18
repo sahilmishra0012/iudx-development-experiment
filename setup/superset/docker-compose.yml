@@ -9,7 +9,6 @@ volumes:
 
 services:
   superset:
-    # image: amancevice/superset:latest
     build: .
     hostname: superset
     ports:
