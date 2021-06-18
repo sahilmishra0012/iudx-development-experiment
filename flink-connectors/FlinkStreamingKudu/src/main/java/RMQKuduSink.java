@@ -112,11 +112,9 @@ public class RMQ_HDFS_Job {
                         ))
                 .setParallelism(1);
 
-        // Printing the data as a sink
-//        stream.print();
 
 
-        String tableName = "iudx002";
+        String tableName = "kudu_table";
         KuduClient client = new KuduClient.KuduClientBuilder(KUDU_MASTERS).build();
 
         try {
@@ -134,7 +132,7 @@ public class RMQ_HDFS_Job {
                 writerConfig,
                 KuduTableInfo.forTable(tableName),
                 new RowOperationMapper(
-                        new String[]{"key", "signal", "deviceId"},
+                        new String[]{"key", "date", "signal"},
                         AbstractSingleOperationMapper.KuduOperation.UPSERT));
 
         stream.addSink(sink);
@@ -149,9 +147,9 @@ public class RMQ_HDFS_Job {
         columns.add(new ColumnSchema.ColumnSchemaBuilder("key", Type.INT32)
                 .key(true)
                 .build());
-        columns.add(new ColumnSchema.ColumnSchemaBuilder("signal", Type.DOUBLE).nullable(true)
+        columns.add(new ColumnSchema.ColumnSchemaBuilder("date", Type.STRING).nullable(true)
                 .build());
-        columns.add(new ColumnSchema.ColumnSchemaBuilder("deviceId", Type.STRING).nullable(true)
+        columns.add(new ColumnSchema.ColumnSchemaBuilder("signal", Type.DOUBLE).nullable(true)
                 .build());
         Schema schema = new Schema(columns);
 
@@ -182,14 +180,14 @@ public class RMQ_HDFS_Job {
             JSONObject obj = new JSONObject(streamData);
 
             System.out.println("KEY: " + obj.get("key"));
+            System.out.println("DATE: " + obj.get("date"));
             System.out.println("SIGNAL: " + obj.get("signal"));
-            System.out.println("DEVICEID: " + obj.get("deviceId"));
             System.out.println("**********************************************\n");
 
             Row values = new Row(3);
             values.setField(0, obj.get("key"));
-            values.setField(1, obj.get("signal"));
-            values.setField(2, obj.get("deviceId"));
+            values.setField(1, obj.get("date"));
+            values.setField(2, obj.get("signal"));
             return values;
         }
     }
