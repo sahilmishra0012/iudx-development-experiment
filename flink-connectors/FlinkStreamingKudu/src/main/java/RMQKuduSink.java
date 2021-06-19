@@ -69,7 +69,7 @@ import javax.xml.bind.DatatypeConverter;
 
 
 
-public class RMQ_HDFS_Job {
+public class RMQKuduSink {
 
     private static final String KUDU_MASTERS = System.getProperty("kuduMasters", "127.0.0.1:7051,127.0.0.1:7151,127.0.0.1:7251");
 
