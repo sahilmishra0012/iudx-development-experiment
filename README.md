@@ -33,12 +33,31 @@ RMQ -> Kudu -> Flink -> Impala -> Superset -> Apps
 In order to setup the FISKR pipeline, a lot of components need to be setup individually and in a proper sequence.
 
 Usual deployments will have to follow the following sequence.
+
 #### **RabbitMQ**
 RabbitMQ needs to be setup before everything so that the other components do find the queues while starting up.
 
     cd scripts/start_services
     ./start_rmq.sh
 #### **Kudu**
+Kudu stores the streaming data into a column-oriented database. It needs to be started before starting flink job so that Flink is able to find Kudu masters running beforehand.
+
+    cd scripts/start_services
+    ./start_kudu.sh
 #### **Flink**
+Flink adds the RMQ consumer as source to pull the data and sinks it into the Kudu tables. A Flink job can be setup locally using maven.
+
+    cd flink-connectors/FlinkStreamingKudu
+    mvn clean package
+    cp dataConfig.properties target/dataConfig.properties
+    cd target
+    java -jar IUDXAnalyticsExperiment-1.0-SNAPSHOT.jar
+
+Also, this JAR file can be submitted as job to the Flink cluster. Its setup and code will be updated soon.
+
 #### **Impala**
+Impala is used to query into Kudu tables. It creates a mapping table (external table) which creates a link to the Kudu table. Then, SQL queries can be run in `impala-shell` to access Kudu tables' data.
+
+    cd scripts/start_services
+    ./start_impala.sh
 #### **Superset**
