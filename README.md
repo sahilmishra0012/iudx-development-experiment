@@ -26,10 +26,10 @@ Setting this application will require multiple servers and of different configur
 - **Superset**:
   - **Memory** - Recommended 8 GB.
   - **Storage Space** - 40 GB recommended.
-### **Setup order**
+### **Components Setup order**
 RMQ -> Kudu -> Flink -> Impala -> Superset -> Apps
 
-### **Setup**
+### **Components Setup**
 In order to setup the FISKR pipeline, a lot of components need to be setup individually and in a proper sequence.
 
 Usual deployments will have to follow the following sequence.
@@ -61,3 +61,45 @@ Impala is used to query into Kudu tables. It creates a mapping table (external t
     cd scripts/start_services
     ./start_impala.sh
 #### **Superset**
+Superset performs analysis over the data and creates visualization. It connects to the impala database using its URL.
+
+    cd scripts/start_services
+    ./start_superset.sh
+
+### **Running Components**
+
+#### **Publisher**
+Since RMQ service is on, the data can be pushed to RMQ exchange from publisher. 
+
+    cd extras/RMQPublisher/FlinkKuduPublisher
+    pip install -r requirements.txt
+    python publisher.py
+
+This starts up the publisher.
+
+#### **Impala Shell**
+The data gets pushed into the Kudu table. This table needs to mapped to impala external table so that it can be queried. So, impala-shell needs to be installed and then connected to impala service.
+
+    pip install impala-shell==3.4.0
+    impala-shell
+    > CONNECT 172.18.0.1:21000;
+
+The impala-shell, then needs to create an external table to map to kudu table.
+
+    CREATE EXTERNAL TABLE mapping_table
+    STORED AS KUDU
+    TBLPROPERTIES (
+      'kudu.table_name' = 'iudx005'
+    );
+
+Now, this table can be accessed from Superset easily.
+#### **Superset**
+The Impala database can be linked to the Superset very conveniently. The following URL can access the Impala database.
+
+The expected connection string is formatted as follows:
+
+    impala://{hostname}:{port}/{database}
+
+For example:
+
+    impala://impalad-1_1:21050/kudu_table_database
