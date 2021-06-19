@@ -84,13 +84,15 @@ The data gets pushed into the Kudu table. This table needs to mapped to impala e
     impala-shell
     > CONNECT 172.18.0.1:21000;
 
-The impala-shell, then needs to create an external table to map to kudu table.
+The impala-shell, then needs to create an external table to map to kudu table. We can also create a separate database to store Kudu tables.
 
-    CREATE EXTERNAL TABLE mapping_table
-    STORED AS KUDU
-    TBLPROPERTIES (
-      'kudu.table_name' = 'iudx005'
-    );
+    > CREATE DATABASE KUDU_DB;
+    > USE KUDU_DB;
+    > CREATE EXTERNAL TABLE mapping_table
+      STORED AS KUDU
+      TBLPROPERTIES (
+        'kudu.table_name' = 'iudx005'
+      );
 
 Now, this table can be accessed from Superset easily.
 #### **Superset**
@@ -102,4 +104,9 @@ The expected connection string is formatted as follows:
 
 For example:
 
-    impala://impalad-1_1:21050/kudu_table_database
+    impala://172.18.0.1:21050/kudu_db
+
+**Note**: IP `172.18.0.1` should not be hardcoded. This IP is the value of `QUICKSTART_LISTEN_ADDR` which is declared initialized while starting the [Impala service](scripts/start_services/start_impala.sh).
+
+## **Future Works**
+Two new [Apache Airflow](https://airflow.apache.org/) and [Apache Arrow](https://arrow.apache.org/) based pipelines are in work in progress.
