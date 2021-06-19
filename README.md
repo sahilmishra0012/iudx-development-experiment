@@ -26,9 +26,19 @@ Setting this application will require multiple servers and of different configur
 - **Superset**:
   - **Memory** - Recommended 8 GB.
   - **Storage Space** - 40 GB recommended.
-
 ### **Setup order**
 RMQ -> Kudu -> Flink -> Impala -> Superset -> Apps
 
 ### **Setup**
 In order to setup the FISKR pipeline, a lot of components need to be setup individually and in a proper sequence.
+
+Usual deployments will have to follow the following sequence.
+#### **RabbitMQ**
+RabbitMQ needs to be setup before everything so that the other components do find the queues while starting up.
+
+    cd scripts/start_services
+    ./start_rmq.sh
+#### **Kudu**
+#### **Flink**
+#### **Impala**
+#### **Superset**
