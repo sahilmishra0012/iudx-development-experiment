@@ -53,8 +53,7 @@ Flink adds the RMQ consumer as source to pull the data and sinks it into the Kud
     cd target
     java -jar IUDXAnalyticsExperiment-1.0-SNAPSHOT.jar
 
-Also, this JAR file can be submitted as job to the Flink cluster. Its setup and code will be updated soon.
-
+***Also, this JAR file can be submitted as job to the Flink cluster. Its setup and code will be updated soon.***
 #### **Impala**
 Impala is used to query into Kudu tables. It creates a mapping table (external table) which creates a link to the Kudu table. Then, SQL queries can be run in `impala-shell` to access Kudu tables' data.
 
