@@ -33,7 +33,7 @@ services:
     networks:
       - analytics-net
     environment:
-      - KUDU_MASTERS=kudu-master-1:7051,kudu-master-2:7151,kudu-master-3:7251
+      - KUDU_MASTERS=kudu-master-1:7051
       # TODO: Use `host.docker.internal` instead of KUDU_QUICKSTART_IP when it
       # works on Linux (https://github.com/docker/for-linux/issues/264)
       - >
@@ -45,57 +45,11 @@ services:
         --webserver_doc_root=/opt/kudu/www
         --stderrthreshold=0
         --use_hybrid_clock=false
-  kudu-master-2:
-    image: apache/kudu:${KUDU_QUICKSTART_VERSION:-latest}
-    container_name: kudu-master-2
-    ports:
-      - "7151:7151"
-      - "8151:8151"
-    command: ["master"]
-    volumes:
-      - kudu-master-2:/var/lib/kudu
-    networks:
-      - analytics-net
-    environment:
-      - KUDU_MASTERS=kudu-master-1:7051,kudu-master-2:7151,kudu-master-3:7251
-      - >
-        MASTER_ARGS=--fs_wal_dir=/var/lib/kudu/master
-        --rpc_bind_addresses=kudu-master-2:7151
-        --rpc_advertised_addresses=kudu-master-2:7151
-        --webserver_port=8151
-        --webserver_advertised_addresses=kudu-master-2:8151
-        --webserver_doc_root=/opt/kudu/www
-        --stderrthreshold=0
-        --use_hybrid_clock=false
-  kudu-master-3:
-    image: apache/kudu:${KUDU_QUICKSTART_VERSION:-latest}
-    container_name: kudu-master-3
-    ports:
-      - "7251:7251"
-      - "8251:8251"
-    command: ["master"]
-    volumes:
-      - kudu-master-3:/var/lib/kudu
-    networks:
-      - analytics-net
-    environment:
-      - KUDU_MASTERS=kudu-master-1:7051,kudu-master-2:7151,kudu-master-3:7251
-      - >
-        MASTER_ARGS=--fs_wal_dir=/var/lib/kudu/master
-        --rpc_bind_addresses=kudu-master-3:7251
-        --rpc_advertised_addresses=kudu-master-3:7251
-        --webserver_port=8251
-        --webserver_advertised_addresses=kudu-master-3:8251
-        --webserver_doc_root=/opt/kudu/www
-        --stderrthreshold=0
-        --use_hybrid_clock=false
   kudu-tserver-1:
     image: apache/kudu:${KUDU_QUICKSTART_VERSION:-latest}
     container_name: kudu-tserver-1
     depends_on:
       - kudu-master-1
-      - kudu-master-2
-      - kudu-master-3
     ports:
       - "7050:7050"
       - "8050:8050"
@@ -105,7 +59,7 @@ services:
     networks:
       - analytics-net
     environment:
-      - KUDU_MASTERS=kudu-master-1:7051,kudu-master-2:7151,kudu-master-3:7251
+      - KUDU_MASTERS=kudu-master-1:7051
       - >
         TSERVER_ARGS=--fs_wal_dir=/var/lib/kudu/tserver
         --rpc_bind_addresses=kudu-tserver-1:7050
@@ -120,8 +74,6 @@ services:
     container_name: kudu-tserver-2
     depends_on:
       - kudu-master-1
-      - kudu-master-2
-      - kudu-master-3
     ports:
       - "7150:7150"
       - "8150:8150"
@@ -131,7 +83,7 @@ services:
     networks:
       - analytics-net
     environment:
-      - KUDU_MASTERS=kudu-master-1:7051,kudu-master-2:7151,kudu-master-3:7251
+      - KUDU_MASTERS=kudu-master-1:7051
       - >
         TSERVER_ARGS=--fs_wal_dir=/var/lib/kudu/tserver
         --rpc_bind_addresses=kudu-tserver-2:7150
@@ -146,8 +98,6 @@ services:
     container_name: kudu-tserver-3
     depends_on:
       - kudu-master-1
-      - kudu-master-2
-      - kudu-master-3
     ports:
       - "7250:7250"
       - "8250:8250"
@@ -157,7 +107,7 @@ services:
     networks:
       - analytics-net
     environment:
-      - KUDU_MASTERS=kudu-master-1:7051,kudu-master-2:7151,kudu-master-3:7251
+      - KUDU_MASTERS=kudu-master-1:7051
       - >
         TSERVER_ARGS=--fs_wal_dir=/var/lib/kudu/tserver
         --rpc_bind_addresses=kudu-tserver-3:7250
@@ -167,64 +117,8 @@ services:
         --webserver_doc_root=/opt/kudu/www
         --stderrthreshold=0
         --use_hybrid_clock=false
-  kudu-tserver-4:
-    image: apache/kudu:${KUDU_QUICKSTART_VERSION:-latest}
-    container_name: kudu-tserver-4
-    depends_on:
-      - kudu-master-1
-      - kudu-master-2
-      - kudu-master-3
-    ports:
-      - "7350:7350"
-      - "8350:8350"
-    command: ["tserver"]
-    volumes:
-      - kudu-tserver-4:/var/lib/kudu
-    networks:
-      - analytics-net
-    environment:
-      - KUDU_MASTERS=kudu-master-1:7051,kudu-master-2:7151,kudu-master-3:7251
-      - >
-        TSERVER_ARGS=--fs_wal_dir=/var/lib/kudu/tserver
-        --rpc_bind_addresses=kudu-tserver-4:7350
-        --rpc_advertised_addresses=kudu-tserver-4:7350
-        --webserver_port=8350
-        --webserver_advertised_addresses=kudu-tserver-4:8350
-        --webserver_doc_root=/opt/kudu/www
-        --stderrthreshold=0
-        --use_hybrid_clock=false
-  kudu-tserver-5:
-    image: apache/kudu:${KUDU_QUICKSTART_VERSION:-latest}
-    container_name: kudu-tserver-5
-    depends_on:
-      - kudu-master-1
-      - kudu-master-2
-      - kudu-master-3
-    ports:
-      - "7450:7450"
-      - "8450:8450"
-    command: ["tserver"]
-    volumes:
-      - kudu-tserver-5:/var/lib/kudu
-    networks:
-      - analytics-net
-    environment:
-      - KUDU_MASTERS=kudu-master-1:7051,kudu-master-2:7151,kudu-master-3:7251
-      - >
-        TSERVER_ARGS=--fs_wal_dir=/var/lib/kudu/tserver
-        --rpc_bind_addresses=kudu-tserver-5:7450
-        --rpc_advertised_addresses=kudu-tserver-5:7450
-        --webserver_port=8450
-        --webserver_advertised_addresses=kudu-tserver-5:8450
-        --webserver_doc_root=/opt/kudu/www
-        --stderrthreshold=0
-        --use_hybrid_clock=false
 volumes:
   kudu-master-1:
-  kudu-master-2:
-  kudu-master-3:
   kudu-tserver-1:
   kudu-tserver-2:
   kudu-tserver-3:
-  kudu-tserver-4:
-  kudu-tserver-5:
