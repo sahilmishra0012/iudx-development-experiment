@@ -61,8 +61,8 @@ import javax.xml.bind.DatatypeConverter;
 
 public class RMQKuduSink {
 
-    private static final String KUDU_MASTERS = System.getProperty("kuduMasters", "0.0.0.0:7051");
 
+    private static final String KUDU_MASTERS = System.getProperty("kuduMasters", "kudu-master-1:7051,kudu-master-2:7151,kudu-master-3:7251");
     public static void main(String[] args) throws Exception {
 
         // creating environment
@@ -71,7 +71,7 @@ public class RMQKuduSink {
 
         // Creating connection configuration for RMQ Source
         final RMQConnectionConfig connectionConfig = new RMQConnectionConfig.Builder()
-                .setHost("0.0.0.0")
+                .setHost("rmq_rmq_1")
                 .setUserName("guest")
                 .setPassword("guest")
                 .setPort(5672)
@@ -89,7 +89,7 @@ public class RMQKuduSink {
                 .setParallelism(1);
 
 
-        String tableName = "suratdata3218";
+        String tableName = "nuemann2";
         KuduClient client = new KuduClient.KuduClientBuilder(KUDU_MASTERS).build();
 
         try {
@@ -101,8 +101,7 @@ public class RMQKuduSink {
 
 
         // kudu sink
-        KuduWriterConfig writerConfig = KuduWriterConfig.Builder.setMasters("0.0.0.0:7051").build();
-
+        KuduWriterConfig writerConfig = KuduWriterConfig.Builder.setMasters("kudu-master-1:7051,kudu-master-2:7151,kudu-master-3:7251").build();
         KuduSink<Row> sink = new KuduSink<>(
                 writerConfig,
                 KuduTableInfo.forTable(tableName),
