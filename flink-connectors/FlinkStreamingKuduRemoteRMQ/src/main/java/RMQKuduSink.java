@@ -115,7 +115,7 @@ public class RMQKuduSink {
 
 
 
-        String tableName = "surat55858673";
+        String tableName = "suratdata";
         KuduClient client = new KuduClient.KuduClientBuilder(KUDU_MASTERS).build();
 
         try {
@@ -168,7 +168,7 @@ public class RMQKuduSink {
                 .build());
         columns.add(new ColumnSchema.ColumnSchemaBuilder("observationDateTime", Type.STRING).nullable(true)
                 .build());
-        columns.add(new ColumnSchema.ColumnSchemaBuilder("trip_delay", Type.INT32).nullable(true)
+        columns.add(new ColumnSchema.ColumnSchemaBuilder("trip_delay", Type.FLOAT).nullable(true)
                 .build());
         Schema schema = new Schema(columns);
 
