@@ -89,7 +89,7 @@ public class RMQKuduSink {
                 .setParallelism(1);
 
 
-        String tableName = "nuemann2";
+        String tableName = "laymann21";
         KuduClient client = new KuduClient.KuduClientBuilder(KUDU_MASTERS).build();
 
         try {
@@ -121,7 +121,7 @@ public class RMQKuduSink {
         columns.add(new ColumnSchema.ColumnSchemaBuilder("key", Type.INT32)
                 .key(true)
                 .build());
-        columns.add(new ColumnSchema.ColumnSchemaBuilder("date",Type.STRING ).key(true)
+        columns.add(new ColumnSchema.ColumnSchemaBuilder("date",Type.STRING ).nullable(true)
                 .build());
         columns.add(new ColumnSchema.ColumnSchemaBuilder("signal", Type.DOUBLE).nullable(true)
                 .build());
