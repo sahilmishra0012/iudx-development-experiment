@@ -4,6 +4,7 @@ import org.apache.flink.connectors.kudu.connector.KuduTableInfo;
 import org.apache.flink.connectors.kudu.connector.writer.AbstractSingleOperationMapper;
 import org.apache.flink.connectors.kudu.connector.writer.KuduWriterConfig;
 import org.apache.flink.connectors.kudu.connector.writer.RowOperationMapper;
+import org.apache.flink.connectors.kudu.connector.writer.RowOperationMapper;
 import org.apache.flink.connectors.kudu.streaming.KuduSink;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -18,6 +19,13 @@ import org.apache.kudu.client.KuduClient;
 import org.apache.kudu.client.KuduException;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.apache.kudu.client.RowError;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.apache.flink.connectors.kudu.connector.failure.KuduFailureHandler;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.FileInputStream;
@@ -77,7 +85,7 @@ public class RMQKuduSink {
                     KuduTableInfo.forTable(tableName),
                     new RowOperationMapper(
                             new String[]{"primary_key","trip_id","id","route_id","trip_direction","actual_trip_start_time","last_stop_arrival_time","vehicle_label","license_plate","last_stop_id","speed","observationDateTime","trip_delay","location_type","coordinate0","coordinate1"},
-                            AbstractSingleOperationMapper.KuduOperation.INSERT));
+                            AbstractSingleOperationMapper.KuduOperation.INSERT), new CustomKuduFailureHandler());
             stream.addSink(sink);
         }
         catch(Exception e){
@@ -203,4 +211,15 @@ public class RMQKuduSink {
         protected void setupQueue() {
         }
     }
+
+
+
+    static class CustomKuduFailureHandler implements KuduFailureHandler {
+
+      @Override
+      public void onFailure(List<RowError> failure) throws IOException {
+        // Doing nothing here, sigh
+      }
+    }
+    
 }
