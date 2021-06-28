@@ -59,7 +59,7 @@ public class RMQKuduSink {
 
 
 
-        String tableName = "surat_itms_data_june2";
+        String tableName = "surat_itms_data_june21";
         KuduClient client = new KuduClient.KuduClientBuilder(KUDU_MASTERS).build();
 
         try {
@@ -71,15 +71,21 @@ public class RMQKuduSink {
 
         // kudu sink
         KuduWriterConfig writerConfig = KuduWriterConfig.Builder.setMasters("kudu_kudu-master-1_1:7051").build();
+        try{
+            KuduSink<Row> sink = new KuduSink<>(
+                    writerConfig,
+                    KuduTableInfo.forTable(tableName),
+                    new RowOperationMapper(
+                            new String[]{"primary_key","trip_id","id","route_id","trip_direction","actual_trip_start_time","last_stop_arrival_time","vehicle_label","license_plate","last_stop_id","speed","observationDateTime","trip_delay","location_type","coordinate0","coordinate1"},
+                            AbstractSingleOperationMapper.KuduOperation.INSERT));
+            stream.addSink(sink);
+        }
+        catch(Exception e){
+            System.out.println("Duplicate Row");
+            System.out.println(e);
+        }
 
-        KuduSink<Row> sink = new KuduSink<>(
-                writerConfig,
-                KuduTableInfo.forTable(tableName),
-                new RowOperationMapper(
-                        new String[]{"primary_key","trip_id","id","route_id","trip_direction","actual_trip_start_time","last_stop_arrival_time","vehicle_label","license_plate","last_stop_id","speed","observationDateTime","trip_delay","location_type","coordinate0","coordinate1"},
-                        AbstractSingleOperationMapper.KuduOperation.INSERT));
 
-        stream.addSink(sink);
 
         env.execute("flink_test_job");
 
@@ -154,7 +160,7 @@ public class RMQKuduSink {
             String actualTripStartTime =  obj.get("actual_trip_start_time").toString();
             String observationDateTime =  obj.get("observationDateTime").toString();
 
-            String keyString=obj.get("trip_id")+obj.get("observationDateTime").toString()+ UUID.randomUUID();
+            String keyString=obj.get("trip_id")+obj.get("observationDateTime").toString();
             String primaryKey = UUID.nameUUIDFromBytes(keyString.getBytes()).toString();
 
             Row values = new Row(16);
