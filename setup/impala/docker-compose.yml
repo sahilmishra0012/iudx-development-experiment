@@ -82,7 +82,7 @@ services:
       - 172.18.0.1:28000:28000
     command: [ "-v=1",
               "-redirect_stdout_stderr=false", "-logtostderr",
-              "-kudu_master_hosts=kudu-master-1:7051,kudu-master-2:7151,kudu-master-3:7251",
+              "-kudu_master_hosts=kudu-master:7051",
               "-mt_dop_auto_fallback=true",
               "-default_query_options=mt_dop=4,default_file_format=parquet,default_transactional_type=insert_only",
               "-mem_limit=4gb"]
