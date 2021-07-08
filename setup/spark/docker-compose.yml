@@ -21,6 +21,7 @@ services:
       - '7077:7077'
     networks:
       - analytics-net
+    restart: always
   spark-worker-1:
     build:
       dockerfile: ./Dockerfile
@@ -37,6 +38,7 @@ services:
       - SPARK_SSL_ENABLED=no
     networks:
       - analytics-net
+    restart: always
   spark-worker-2:
     build:
       dockerfile: ./Dockerfile
@@ -53,3 +55,4 @@ services:
       - SPARK_SSL_ENABLED=no
     networks:
     - analytics-net
+    restart: always

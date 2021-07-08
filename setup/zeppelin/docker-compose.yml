@@ -14,3 +14,4 @@ services:
       - ./spark-source/spark-3.0.0-bin-hadoop3.2:/spark
     ports:
       - "10088:8080"
+    restart: always
