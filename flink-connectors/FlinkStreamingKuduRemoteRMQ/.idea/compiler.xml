@@ -6,13 +6,15 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="FlinkStreamingKuduRemoteRMQ" />
-        <module name="IUDXAnalyticsExperiment" />
+        <module name="surat_itms_live" />
         <module name="paras-iudx-experiment" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="FlinkStreamingKuduRemoteRMQ" target="8" />
       <module name="IUDX-Analytics-Experiment" target="11" />
+      <module name="IUDXAnalyticsExperiment" target="8" />
+      <module name="SuratITMS" target="8" />
     </bytecodeTargetLevel>
   </component>
 </project>

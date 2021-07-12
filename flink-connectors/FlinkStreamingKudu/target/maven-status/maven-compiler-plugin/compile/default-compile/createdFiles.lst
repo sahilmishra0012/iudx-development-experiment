@@ -1,0 +1,3 @@
+RMQKuduSink$CustomRMQSource.class
+RMQKuduSink$CustomDeserializationSchema.class
+RMQKuduSink.class
