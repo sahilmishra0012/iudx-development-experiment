@@ -62,7 +62,7 @@ import javax.xml.bind.DatatypeConverter;
 public class RMQKuduSink {
 
 
-    private static final String KUDU_MASTERS = System.getProperty("kuduMasters", "kudu-master-1:7051,kudu-master-2:7151,kudu-master-3:7251");
+    private static final String KUDU_MASTERS = System.getProperty("kuduMasters", "127.0.0.1:7051");
     public static void main(String[] args) throws Exception {
 
         // creating environment
@@ -89,7 +89,7 @@ public class RMQKuduSink {
                 .setParallelism(1);
 
 
-        String tableName = "laymann21";
+        String tableName = "newtable21";
         KuduClient client = new KuduClient.KuduClientBuilder(KUDU_MASTERS).build();
 
         try {
@@ -101,7 +101,7 @@ public class RMQKuduSink {
 
 
         // kudu sink
-        KuduWriterConfig writerConfig = KuduWriterConfig.Builder.setMasters("kudu-master-1:7051,kudu-master-2:7151,kudu-master-3:7251").build();
+        KuduWriterConfig writerConfig = KuduWriterConfig.Builder.setMasters("127.0.0.1:7051").build();
         KuduSink<Row> sink = new KuduSink<>(
                 writerConfig,
                 KuduTableInfo.forTable(tableName),
@@ -127,6 +127,7 @@ public class RMQKuduSink {
                 .build());
         Schema schema = new Schema(columns);
         CreateTableOptions cto = new CreateTableOptions();
+        cto.setNumReplicas(1);
         List<String> hashKeys = new ArrayList<>(1);
         hashKeys.add("key");
         int numBuckets = 8;

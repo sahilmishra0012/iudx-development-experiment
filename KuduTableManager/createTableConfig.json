@@ -1,0 +1,84 @@
+{
+  "type": "kudu",
+  "spec": {
+    "tableSchema": {
+      "tableName": "surat_itms",
+      "dimensionsSpec": {
+        "dimensions": [
+          {
+            "type": "INT32",
+            "name": "column1",
+            "is_key": true
+          },
+          {
+            "type": "STRING",
+            "name": "column2",
+            "is_key": true
+          },
+          {
+            "type": "DOUBLE",
+            "name": "column3",
+            "is_key": false
+          },
+          {
+            "type": "UNIXTIME_MICROS",
+            "name": "column4",
+            "is_key": false
+          }
+        ]
+      }
+    },
+    "ioConfig": {
+      "replicas": 1,
+      "waitKey": true
+    },
+    "tuningConfig": {
+      "partitionSpec": {
+        "hashPartition": {
+          "keys": [
+            "column1",
+            "column2"
+          ],
+          "buckets": 8
+        },
+        "rangePartition": {
+          "columns": [
+            "column1",
+          ],
+          "partitions": [
+            {
+              "lower": [
+                30
+              ],
+              "upper": [
+                39
+              ],
+              "lower_bound": "exclusive",
+              "upper_bound": "exclusive"
+            },
+            {
+              "lower": [
+                40
+              ],
+              "upper": [
+                49
+              ],
+              "lower_bound": "exclusive",
+              "upper_bound": "exclusive"
+            },
+            {
+              "lower": [
+                50
+              ],
+              "upper": [
+                59
+              ],
+              "lower_bound": "exclusive",
+              "upper_bound": "exclusive"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

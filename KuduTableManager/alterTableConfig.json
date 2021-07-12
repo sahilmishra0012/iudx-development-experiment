@@ -1,0 +1,122 @@
+{
+  "type": "kudu",
+  "spec": {
+    "tableSchema": {
+      "tableName": "surat_itms",
+    },
+    "tuningConfig": {
+      "renameTable": "xyz",
+      "dimensionsSpec": {
+        "addDimensions": [
+          {
+            "type": "INT32",
+            "name": "column1",
+            "is_nullable": true,
+            "default_value": 54
+          },
+          {
+            "type": "INT32",
+            "name": "column1",
+            "is_nullable": true
+          },
+          {
+            "type": "INT32",
+            "name": "column1",
+            "is_nullable": false,
+            "default_value": 54
+          },
+          {
+            "type": "INT32",
+            "name": "column1",
+            "is_nullable": false
+          }
+        ],
+        "dropDimensions": [
+
+        ],
+        "renameDimensions": [
+          {},
+          {},
+          {}
+        ]
+      },
+
+      "partitionSpec": {
+        "addRangePartition": {
+          "columns": [
+            "column1",
+          ],
+          "partitions": [
+            {
+              "lower": [
+                30
+              ],
+              "upper": [
+                39
+              ],
+              "lower_bound": "exclusive",
+              "upper_bound": "exclusive"
+            },
+            {
+              "lower": [
+                40
+              ],
+              "upper": [
+                49
+              ],
+              "lower_bound": "exclusive",
+              "upper_bound": "exclusive"
+            },
+            {
+              "lower": [
+                50
+              ],
+              "upper": [
+                59
+              ],
+              "lower_bound": "exclusive",
+              "upper_bound": "exclusive"
+            }
+          ]
+        },
+        "dropRangePartition": {
+          "columns": [
+            "column1",
+          ],
+          "partitions": [
+            {
+              "lower": [
+                30
+              ],
+              "upper": [
+                39
+              ],
+              "lower_bound": "exclusive",
+              "upper_bound": "exclusive"
+            },
+            {
+              "lower": [
+                40
+              ],
+              "upper": [
+                49
+              ],
+              "lower_bound": "exclusive",
+              "upper_bound": "exclusive"
+            },
+            {
+              "lower": [
+                50
+              ],
+              "upper": [
+                59
+              ],
+              "lower_bound": "exclusive",
+              "upper_bound": "exclusive"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

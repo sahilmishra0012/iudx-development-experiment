@@ -36,7 +36,7 @@ def main():
 
 	for i in range(iterations):    
 		data = {}
-		data['key'] = i # Add offset to the key so that it doesn't overwrite the existing data
+		data['key'] = i+5976 # Add offset to the key so that it doesn't overwrite the existing data
 		data['date'] = str(datetime.datetime.now())
 		data['signal'] = float(round(sine_signal[i], 4))
 		# data['deviceId'] = generate_cat()
