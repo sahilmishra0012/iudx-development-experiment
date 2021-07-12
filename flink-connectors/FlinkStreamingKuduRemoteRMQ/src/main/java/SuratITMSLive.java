@@ -129,6 +129,7 @@ public class SuratITMSLive {
 
 
 
+<<<<<<< HEAD:flink-connectors/FlinkStreamingKuduRemoteRMQ/src/main/java/SuratITMSLive.java
 
 
 
@@ -144,6 +145,9 @@ public class SuratITMSLive {
 
 
         String tableName = "surat_itms_live334";
+=======
+        String tableName = "surat_itms_data_june21";
+>>>>>>> ade4b3b8d35f76953d1ca6ad8123d70762262002:flink-connectors/FlinkStreamingKuduRemoteRMQ/src/main/java/RMQKuduSink.java
         KuduClient client = new KuduClient.KuduClientBuilder(KUDU_MASTERS).build();
 
         try {
@@ -154,7 +158,11 @@ public class SuratITMSLive {
         }
 
         // kudu sink
+<<<<<<< HEAD:flink-connectors/FlinkStreamingKuduRemoteRMQ/src/main/java/SuratITMSLive.java
         KuduWriterConfig writerConfig = KuduWriterConfig.Builder.setMasters("127.0.0.1:7051").build();
+=======
+        KuduWriterConfig writerConfig = KuduWriterConfig.Builder.setMasters("kudu_kudu-master-1_1:7051").build();
+>>>>>>> ade4b3b8d35f76953d1ca6ad8123d70762262002:flink-connectors/FlinkStreamingKuduRemoteRMQ/src/main/java/RMQKuduSink.java
         try{
             KuduSink<Row> sink = new KuduSink<>(
                     writerConfig,
@@ -238,6 +246,16 @@ public class SuratITMSLive {
             String streamData = new String(bytes);
             Row values = new Row(16);
             JSONObject obj = new JSONObject(streamData);
+<<<<<<< HEAD:flink-connectors/FlinkStreamingKuduRemoteRMQ/src/main/java/SuratITMSLive.java
+=======
+            JSONObject location = obj.getJSONObject("location");
+            JSONArray coordinates = location.getJSONArray("coordinates");
+            String actualTripStartTime =  obj.get("actual_trip_start_time").toString();
+            String observationDateTime =  obj.get("observationDateTime").toString();
+
+            String keyString=obj.get("trip_id")+obj.get("observationDateTime").toString();
+            String primaryKey = UUID.nameUUIDFromBytes(keyString.getBytes()).toString();
+>>>>>>> ade4b3b8d35f76953d1ca6ad8123d70762262002:flink-connectors/FlinkStreamingKuduRemoteRMQ/src/main/java/RMQKuduSink.java
 
             try{
                 JSONObject location = obj.getJSONObject("location");
@@ -296,10 +314,19 @@ public class SuratITMSLive {
 
     static class CustomKuduFailureHandler implements KuduFailureHandler {
 
+<<<<<<< HEAD:flink-connectors/FlinkStreamingKuduRemoteRMQ/src/main/java/SuratITMSLive.java
         @Override
         public void onFailure(List<RowError> failure) throws IOException {
             // Doing nothing here, sigh
         }
     }
 
+=======
+      @Override
+      public void onFailure(List<RowError> failure) throws IOException {
+        // Doing nothing here, sigh
+      }
+    }
+    
+>>>>>>> ade4b3b8d35f76953d1ca6ad8123d70762262002:flink-connectors/FlinkStreamingKuduRemoteRMQ/src/main/java/RMQKuduSink.java
 }
