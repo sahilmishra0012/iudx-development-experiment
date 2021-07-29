@@ -23,4 +23,5 @@ services:
     env_file: ./env
     networks: 
       - analytics-net
+    restart: always
 
