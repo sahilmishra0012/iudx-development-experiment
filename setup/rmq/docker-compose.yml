@@ -16,3 +16,4 @@ services:
       - 15672:15672
     networks:
       - analytics-net
+    restart: always

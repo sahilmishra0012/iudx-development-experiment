@@ -39,6 +39,7 @@ services:
       - ./quickstart_conf:/opt/hive/conf:ro
     networks:
       - analytics-net
+    restart: always
   statestored:
     image: ${IMPALA_QUICKSTART_IMAGE_PREFIX:-}statestored
     ports:
@@ -49,6 +50,7 @@ services:
       - ./quickstart_conf:/opt/impala/conf:ro
     networks:
       - analytics-net
+    restart: always
   catalogd:
     depends_on:
       - statestored
@@ -66,6 +68,7 @@ services:
       - ./quickstart_conf:/opt/impala/conf:ro
     networks:
       - analytics-net
+    restart: always
   impalad-1:
     image: ${IMPALA_QUICKSTART_IMAGE_PREFIX:-}impalad_coord_exec
     depends_on:
@@ -94,6 +97,7 @@ services:
       - ./quickstart_conf:/opt/impala/conf:ro
     networks:
       - analytics-net
+    restart: always
 volumes:
   impala-quickstart-hms:
   impala-quickstart-warehouse:
