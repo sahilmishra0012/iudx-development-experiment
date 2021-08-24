@@ -42,8 +42,7 @@ with DAG(
     'Test',
     default_args=default_args,
     description='Test',
-    schedule_interval=timedelta(days=1),
-    start_date=days_ago(2),
+    schedule_interval='0 07-22 * * *',
     tags=['example'],
 ) as dag:
     # [END instantiate_dag]
